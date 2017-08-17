@@ -1,0 +1,1 @@
+http://nlp.innobic.yzu.edu.tw/demo/word-embedding.html

@@ -1,6 +1,7 @@
 import os
 import jieba
 import numpy as np
+import random
 import keras
 import keras.backend as K
 from keras.models import load_model
@@ -14,7 +15,8 @@ from keras.layers.merge import Add, Dot, Concatenate
 # from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 # parameter
-data_path = './data/training_data/subtitle_no_TC/下課花路米'
+# data_path = './data/training_data/subtitle_no_TC/下課花路米'
+data_path = './preprocess/corpus.txt'
 word_vec_path = './outisde_data/wiki.zh.vector'
 EMBD_DIM = 400
 
@@ -22,14 +24,16 @@ EMBD_DIM = 400
 def load_training_data(data_path):
     """ Load training data files from the directory `data_path`."""
     text_data = []
-    for i,filename in enumerate(os.listdir(data_path)):
-        path = os.path.join(data_path, filename)
-        print(path)
-        with open(path, 'r', encoding='utf8') as f:
-            text_data += f.read().splitlines()[:-1]
-        text_data += [""]
-        if i > -1:
-            break
+    with open(data_path, 'r', encoding='utf8') as f:
+        text_data = f.read().splitlines()
+    # XXX: preprocessed
+    # for i,filename in enumerate(os.listdir(data_path)):
+    #     path = os.path.join(data_path, filename)
+    #     print(path)
+    #     with open(path, 'r', encoding='utf8') as f:
+    #         text_data += f.read().splitlines()[:-1]
+    #     text_data += [""]
+    #     if i > -1: #         break
     return text_data
 text_data = load_training_data(data_path)
 
@@ -37,21 +41,21 @@ print('\nFind {} sentences.\n'.format(len(text_data)))
 # print(text_data[:10])
 # print(text_data[-10:])
 
+# XXX: preprocessed
 # split words and add " " between blanks
-def split_words(text_list):
-    for i,_ in enumerate(text_list):
-        text_list[i] = " ".join(jieba.cut(text_list[i]))
-        # TODO: add user define dict
-        # e.g.
-        #   下課花路米
-    return text_list
-text_data = split_words(text_data)
+# def split_words(text_list):
+#     for i,_ in enumerate(text_list):
+#         text_list[i] = " ".join(jieba.cut(text_list[i]))
+#         # TODO: add user define dict
+#         # e.g.
+#         #   下課花路米
+#     return text_list
+# text_data = split_words(text_data)
 
 # print(text_data[:10])
 # print(text_data[-10:])
 
-
-# generate q_text_data & a_text_data
+# generate correct questions and answers (q_text_data & a_text_data)
 # q_text_data: 1~3
 # a_text_data: 4
 q_text_data = []
@@ -62,7 +66,34 @@ for i,_ in enumerate(text_data):
     q_text_data += [ text_data[i-3] + text_data[i-2] + text_data[i-1] ]
     a_text_data += [ text_data[i] ]
 
+q_all = []
+for q in q_text_data:
+    for _ in range(6):
+        q_all += [q]
 
+def copy_shuffle(origin_list):
+    shuffled_list = list(origin_list)
+    random.shuffle(shuffled_list)
+    # The for-loop below makes sure that there is only one correct answer for each question.
+    for i, _ in enumerate(origin_list):
+        if origin_list[i] == shuffled_list[i]:
+            if i != len(origin_list) - 1:
+                shuffled_list[i], shuffled_list[i + 1] = shuffled_list[i + 1], shuffled_list[i]
+            else:
+                shuffled_list[i], shuffled_list[0] = shuffled_list[0], shuffled_list[i]
+    return shuffled_list
+range_list = list(range(len(a_text_data)))
+ans_1 = copy_shuffle(range_list)
+ans_2 = copy_shuffle(range_list)
+ans_3 = copy_shuffle(range_list)
+ans_4 = copy_shuffle(range_list)
+ans_5 = copy_shuffle(range_list)
+
+a_all = []
+for i in range_list:
+
+
+'''
 # generate tokenizer for all data (q_train + a_train)
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts(text_data)
@@ -163,3 +194,4 @@ def generate_model():
     model.summary()
     return model
 model = generate_model()
+'''

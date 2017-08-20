@@ -108,3 +108,7 @@ outisde_data/wiki\.zh\.vector
 sample_preprocess/corpus\.txt
 
 data/training_data/
+
+preprocess/original samples/original_corpus\.txt
+
+preprocess/corpus\.txt

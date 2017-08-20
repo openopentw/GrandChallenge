@@ -72,6 +72,7 @@ for q in q_text_data:
         q_all += [q]
 
 def copy_shuffle(origin_list):
+    print('Generating fake answers ...')
     shuffled_list = list(origin_list)
     random.shuffle(shuffled_list)
     # The for-loop below makes sure that there is only one correct answer for each question.
@@ -83,14 +84,24 @@ def copy_shuffle(origin_list):
                 shuffled_list[i], shuffled_list[0] = shuffled_list[0], shuffled_list[i]
     return shuffled_list
 range_list = list(range(len(a_text_data)))
-ans_1 = copy_shuffle(range_list)
-ans_2 = copy_shuffle(range_list)
-ans_3 = copy_shuffle(range_list)
-ans_4 = copy_shuffle(range_list)
-ans_5 = copy_shuffle(range_list)
+fake_ans_id = [copy_shuffle(range_list)]
+fake_ans_id += [copy_shuffle(range_list)]
+fake_ans_id += [copy_shuffle(range_list)]
+fake_ans_id += [copy_shuffle(range_list)]
+fake_ans_id += [copy_shuffle(range_list)]
 
+answers = []
 a_all = []
 for i in range_list:
+    ans = random.randint(0, 5)
+    answers += [ans]
+    other_ans_cnt = 0
+    for j in range(6):
+        if j == ans:
+            a_all += [a_text_data[i]]
+        else:
+            a_all += [a_text_data[fake_ans_id[other_ans_cnt][i]]]
+            other_ans_cnt += 1
 
 
 '''

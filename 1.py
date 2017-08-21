@@ -58,53 +58,54 @@ print('\nFind {} sentences.\n'.format(len(text_data)))
 # generate correct questions and answers (q_text_data & a_text_data)
 # q_text_data: 1~3
 # a_text_data: 4
-q_text_data = []
-a_text_data = []
-for i,_ in enumerate(text_data):
-    if i < 3 or not text_data[i-3] or not text_data[i-2] or not text_data[i-1] or not text_data[i]:
-        continue
-    q_text_data += [ text_data[i-3] + text_data[i-2] + text_data[i-1] ]
-    a_text_data += [ text_data[i] ]
+# TODO: copy these to bottom
+# q_text_data = []
+# a_text_data = []
+# for i,_ in enumerate(text_data):
+#     if i < 3 or not text_data[i-3] or not text_data[i-2] or not text_data[i-1] or not text_data[i]:
+#         continue
+#     q_text_data += [ text_data[i-3] + text_data[i-2] + text_data[i-1] ]
+#     a_text_data += [ text_data[i] ]
 
-q_all = []
-for q in q_text_data:
-    for _ in range(6):
-        q_all += [q]
+# q_all = []
+# for q in q_text_data:
+#     for _ in range(6):
+#         q_all += [q]
 
-def copy_shuffle(origin_list):
-    print('Generating fake answers ...')
-    shuffled_list = list(origin_list)
-    random.shuffle(shuffled_list)
-    # The for-loop below makes sure that there is only one correct answer for each question.
-    for i, _ in enumerate(origin_list):
-        if origin_list[i] == shuffled_list[i]:
-            if i != len(origin_list) - 1:
-                shuffled_list[i], shuffled_list[i + 1] = shuffled_list[i + 1], shuffled_list[i]
-            else:
-                shuffled_list[i], shuffled_list[0] = shuffled_list[0], shuffled_list[i]
-    return shuffled_list
-range_list = list(range(len(a_text_data)))
-fake_ans_id = [copy_shuffle(range_list)]
-fake_ans_id += [copy_shuffle(range_list)]
-fake_ans_id += [copy_shuffle(range_list)]
-fake_ans_id += [copy_shuffle(range_list)]
-fake_ans_id += [copy_shuffle(range_list)]
+# def copy_shuffle(origin_list):
+#     print('Generating fake answers ...')
+#     shuffled_list = list(origin_list)
+#     random.shuffle(shuffled_list)
+#     # The for-loop below makes sure that there is only one correct answer for each question.
+#     for i, _ in enumerate(origin_list):
+#         if origin_list[i] == shuffled_list[i]:
+#             if i != len(origin_list) - 1:
+#                 shuffled_list[i], shuffled_list[i + 1] = shuffled_list[i + 1], shuffled_list[i]
+#             else:
+#                 shuffled_list[i], shuffled_list[0] = shuffled_list[0], shuffled_list[i]
+#     return shuffled_list
+# range_list = list(range(len(a_text_data)))
+# fake_ans_id = [copy_shuffle(range_list)]
+# fake_ans_id += [copy_shuffle(range_list)]
+# fake_ans_id += [copy_shuffle(range_list)]
+# fake_ans_id += [copy_shuffle(range_list)]
+# fake_ans_id += [copy_shuffle(range_list)]
 
-answers = []
-a_all = []
-for i in range_list:
-    ans = random.randint(0, 5)
-    answers += [ans]
-    other_ans_cnt = 0
-    for j in range(6):
-        if j == ans:
-            a_all += [a_text_data[i]]
-        else:
-            a_all += [a_text_data[fake_ans_id[other_ans_cnt][i]]]
-            other_ans_cnt += 1
+# answers = []
+# a_all = []
+# for i in range_list:
+#     ans = random.randint(0, 5)
+#     other_ans_cnt = 0
+#     for j in range(6):
+#         if j == ans:
+#             answers += [1]
+#             a_all += [a_text_data[i]]
+#         else:
+#             answers += [0]
+#             a_all += [a_text_data[fake_ans_id[other_ans_cnt][i]]]
+#             other_ans_cnt += 1
 
 
-'''
 # generate tokenizer for all data (q_train + a_train)
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts(text_data)
@@ -205,4 +206,3 @@ def generate_model():
     model.summary()
     return model
 model = generate_model()
-'''

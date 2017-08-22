@@ -180,4 +180,4 @@ def generate_model(q_shape, a_shape):
 model = generate_model(q_train.shape[1], a_train.shape[1])
 
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
-model.fit([q_train, a_train], ans, epochs=10000, batch_size=10, validation_split=0.1)
+model.fit([q_train, a_train], ans, epochs=10, batch_size=100, validation_split=0.1)

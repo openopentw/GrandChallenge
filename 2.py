@@ -25,7 +25,7 @@ from keras.preprocessing.text import Tokenizer
 
 # parameter
 data_path = './preprocess/corpus.txt'
-word_vec_path = './outisde_data/wiki.zh.vector'
+word_vec_path = './outside_data/wiki.zh.vector'
 EMBD_DIM = 400
 
 # load training data

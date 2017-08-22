@@ -112,3 +112,7 @@ data/training_data/
 preprocess/original samples/original_corpus\.txt
 
 preprocess/corpus\.txt
+
+outside_data/wiki\.zh\.vector
+
+outside_data/wiki\.zh\.vector\.zip

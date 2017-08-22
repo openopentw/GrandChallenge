@@ -17,7 +17,7 @@ from keras.layers.merge import Add, Dot, Concatenate
 # parameter
 # data_path = './data/training_data/subtitle_no_TC/下課花路米'
 data_path = './preprocess/corpus.txt'
-word_vec_path = './outisde_data/wiki.zh.vector'
+word_vec_path = './outside_data/wiki.zh.vector'
 EMBD_DIM = 400
 
 # load training data

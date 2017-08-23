@@ -42,6 +42,8 @@ tokenizer.fit_on_texts(text_data)
 word_index = tokenizer.word_index
 print('Found {} unique tokens.'.format(len(word_index)))
 
+n_wrong_ans = 5
+
 # generate wrong answers' index
 def copy_shuffle(origin_list):
     shuffled_list = list(origin_list)
@@ -55,51 +57,54 @@ def copy_shuffle(origin_list):
                 shuffled_list[i], shuffled_list[0] = shuffled_list[0], shuffled_list[i]
     print('Finish Generating fake answers.')
     return shuffled_list
-fake_ans_id = copy_shuffle(list(range(len(text_data))))
+fake_ans_id = []
+for _ in range(n_wrong_ans):
+    fake_ans_id += [ copy_shuffle(list(range(len(text_data)))) ]
 
 # generate sequences
 sequences = tokenizer.texts_to_sequences(text_data)
 
 # generate another one wrong answer
-ans = []
-q_sequences = []
-a_sequences = []
-rand_ans = np.random.randint(2, size=len(sequences))
-for i,_ in enumerate(text_data):
-    if i < 1 or not sequences[i-1] or not sequences[i]:
-        continue
-    q_sequences += [ sequences[i-1] ]
-    q_sequences += [ sequences[i-1] ]
-    if rand_ans[i] == 0:
-        ans += [1]
-        a_sequences += [ sequences[i] ]
-        ans += [0]
-        a_sequences += [ sequences[fake_ans_id[i]] ]
-    else:
-        ans += [0]
-        a_sequences += [ sequences[fake_ans_id[i]] ]
-        ans += [1]
-        a_sequences += [ sequences[i] ]
-print('Finish generating questions and answers.')
+# ans = []
+# q_sequences = []
+# a_sequences = []
+# rand_ans = np.random.randint(2, size=len(sequences))
+# for i,_ in enumerate(text_data):
+#     if i < 1 or not sequences[i-1] or not sequences[i]:
+#         continue
+#     q_sequences += [ sequences[i-1] ]
+#     q_sequences += [ sequences[i-1] ]
+#     if rand_ans[i] == 0:
+#         ans += [1]
+#         a_sequences += [ sequences[i] ]
+#         ans += [0]
+#         a_sequences += [ sequences[fake_ans_id[i]] ]
+#     else:
+#         ans += [0]
+#         a_sequences += [ sequences[fake_ans_id[i]] ]
+#         ans += [1]
+#         a_sequences += [ sequences[i] ]
+# print('Finish generating questions and answers.')
 
 # concate 3 together & generate other 5 wrong answer
-# q_3_sequences = []
-# a_3_sequences = []
-# ans_3 = []
-# rand_ans = np.random.randint(6, size=len(sequences))
-# for i,_ in enumerate(text_data):
-#     if i < 3 or not sequences[i-3] or not sequences[i-2] or not sequences[i-1] or not sequences[i]:
-#         continue
-#     fake_ans_cnt = 0
-#     for j in range(6):
-#         q_3_sequences += [ sequences[i-3] + sequences[i-2] + sequences[i-1] ]
-#         if j == rand_ans[i]:
-#             ans_3 += [1]
-#             a_3_sequences += [ sequences[i] ]
-#         else:
-#             ans_3 += [0]
-#             a_3_sequences += [ sequences[fake_ans_id[fake_ans_cnt][i]] ]
-#             fake_ans_cnt += 1
+q_sequences = []
+a_sequences = []
+ans = []
+rand_ans = np.random.randint(n_wrong_ans + 1, size=len(sequences))
+for i,_ in enumerate(text_data):
+    if i < 3 or not sequences[i-3] or not sequences[i-2] or not sequences[i-1] or not sequences[i]:
+        continue
+    fake_ans_cnt = 0
+    for j in range(n_wrong_ans):
+        q_sequences += [ sequences[i-3] + sequences[i-2] + sequences[i-1] ]
+        if j == rand_ans[i]:
+            ans += [1]
+            a_sequences += [ sequences[i] ]
+        else:
+            ans += [0]
+            a_sequences += [ sequences[fake_ans_id[fake_ans_cnt][i]] ]
+            fake_ans_cnt += 1
+print('Finish generating questions and answers.')
 
 # pad_sequences
 q_maxlen = max(len(seq) for seq in q_sequences)

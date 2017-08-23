@@ -152,18 +152,20 @@ def generate_model(q_shape, a_shape):
     q_vec = GRU(200, activation='elu', dropout=0.3)(q_vec)
     q_vec = Dropout(0.5)(q_vec)
     q_vec = Dense(100, activation='elu')(q_vec)
+    q_vec = BatchNormalization()(q_vec)
     q_vec = Dropout(0.5)(q_vec)
     q_vec = Dense(50, activation='elu')(q_vec)
-    # q_vec = BatchNormalization()(q_vec)
+    q_vec = BatchNormalization()(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
     a_vec = GRU(200, activation='elu', dropout=0.3)(a_vec)
     a_vec = Dropout(0.5)(a_vec)
     a_vec = Dense(100, activation='elu')(a_vec)
+    a_vec = BatchNormalization()(a_vec)
     a_vec = Dropout(0.5)(a_vec)
     a_vec = Dense(50, activation='elu')(a_vec)
-    # a_vec = BatchNormalization()(a_vec)
+    a_vec = BatchNormalization()(a_vec)
 
     # XXX: dont use dnn!!
     # merge_vec = Concatenate()([q_vec, a_vec])
@@ -184,5 +186,6 @@ def generate_model(q_shape, a_shape):
     return model
 model = generate_model(q_train.shape[1], a_train.shape[1])
 
-model.compile(loss='mse', optimizer='adam', metrics=['mae'])
+# TODO: check if 'bc' is usable
+model.compile(loss='bc', optimizer='adam', metrics=['mae'])
 model.fit([q_train, a_train], ans, epochs=10, batch_size=100, validation_split=0.1)

@@ -177,7 +177,8 @@ def generate_model(q_shape, a_shape):
 
     # TODO: use cosine similarity
     # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051
-    cos_distance = merge([q_vec, a_vec], mode='cos', dot_axes=1)    # magic dot_axes works here!
+    # cos_distance = merge([q_vec, a_vec], mode='cos', dot_axes=1)    # magic dot_axes works here!
+    cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
     cos_distance = Reshape((1,))(cos_distance)
     cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
 

@@ -168,21 +168,12 @@ def generate_model(q_shape, a_shape):
     a_vec = Dense(50, activation='elu')(a_vec)
     a_vec = BatchNormalization()(a_vec)
 
-    # XXX: dont use dnn!!
-    # merge_vec = Concatenate()([q_vec, a_vec])
-    # hidden = Dense(150, activation='elu')(merge_vec)
-    # hidden = Dropout(0.2)(hidden)
-    # hidden = Dense(100, activation='elu')(hidden)
-    # hidden = Dropout(0.2)(hidden)
-    # output = Dense(1, activation='softmax')(hidden) # maybe sigmoid will be better
-
-    # TODO: use cosine similarity
+    # use cosine similarity
     # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051
     # cos_distance = merge([q_vec, a_vec], mode='cos', dot_axes=1)    # magic dot_axes works here!
     cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
-    # cos_distance = Reshape((1,))(cos_distance)
-    cos_similarity = Reshape((1,))(cos_distance)
-    # cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
+    cos_distance = Reshape((1,))(cos_distance)
+    cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
 
     model = Model([q_input, a_input], [cos_similarity])
     model.summary()

@@ -129,13 +129,13 @@ def generate_model(q_shape, a_shape):
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
     # TODO: maybe bidirectional rnn would be better
     q_vec = GRU(200, activation='elu', dropout=0.3)(q_vec)
-    q_vec = Dropout(0.5)(q_vec)
+    q_vec = Dropout(0.6)(q_vec)
     q_vec = Dense(100, activation='elu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
     a_vec = GRU(200, activation='elu', dropout=0.3)(a_vec)
-    a_vec = Dropout(0.5)(a_vec)
+    a_vec = Dropout(0.6)(a_vec)
     a_vec = Dense(100, activation='elu')(a_vec)
 
     # use cosine similarity

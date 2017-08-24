@@ -31,6 +31,7 @@ EMBD_DIM = 400
 # load training data
 with open(data_path, 'r', encoding='utf8') as f:
     text_data = f.read().splitlines()
+text_data = text_data[ : len(text_data) // 2]
 print('Found {} sentences.'.format(len(text_data)))
 
 # generate tokenizer for all data (q_train + a_train)
@@ -179,8 +180,9 @@ def generate_model(q_shape, a_shape):
     # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051
     # cos_distance = merge([q_vec, a_vec], mode='cos', dot_axes=1)    # magic dot_axes works here!
     cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
-    cos_distance = Reshape((1,))(cos_distance)
-    cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
+    # cos_distance = Reshape((1,))(cos_distance)
+    cos_similarity = Reshape((1,))(cos_distance)
+    # cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
 
     model = Model([q_input, a_input], [cos_similarity])
     model.summary()

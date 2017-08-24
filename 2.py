@@ -42,7 +42,7 @@ tokenizer.fit_on_texts(text_data)
 word_index = tokenizer.word_index
 print('Found {} unique tokens.'.format(len(word_index)))
 
-n_wrong_ans = 5
+n_wrong_ans = 1
 
 # generate wrong answers' index
 def copy_shuffle(origin_list):

@@ -187,5 +187,5 @@ def generate_model(q_shape, a_shape):
     return model
 model = generate_model(q_train.shape[1], a_train.shape[1])
 
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
 model.fit([q_train, a_train], ans, epochs=10, batch_size=100, validation_split=0.1)

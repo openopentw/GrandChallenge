@@ -31,7 +31,7 @@ EMBD_DIM = 400
 # load training data
 with open(data_path, 'r', encoding='utf8') as f:
     text_data = f.read().splitlines()
-text_data = text_data[ : 5000]
+text_data = text_data[ : 10000]
 print('Found {} sentences.'.format(len(text_data)))
 
 # generate tokenizer for all data (q_train + a_train)
@@ -128,14 +128,16 @@ def generate_model(q_shape, a_shape):
     q_input = Input(shape=(q_shape,))
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
     # TODO: maybe bidirectional rnn would be better
+    # example: https://github.com/fchollet/keras/blob/master/examples/imdb_bidirectional_lstm.py
+    # official: https://keras.io/layers/wrappers/#bidirectional
     q_vec = GRU(200, activation='elu', dropout=0.3)(q_vec)
-    q_vec = Dropout(0.6)(q_vec)
+    q_vec = Dropout(0.7)(q_vec)
     q_vec = Dense(100, activation='elu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
     a_vec = GRU(200, activation='elu', dropout=0.3)(a_vec)
-    a_vec = Dropout(0.6)(a_vec)
+    a_vec = Dropout(0.7)(a_vec)
     a_vec = Dense(100, activation='elu')(a_vec)
 
     # use cosine similarity
@@ -151,4 +153,4 @@ def generate_model(q_shape, a_shape):
 model = generate_model(q_train.shape[1], a_train.shape[1])
 
 model.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
-model.fit([q_train, a_train], ans, epochs=500, validation_split=0.1)
+model.fit([q_train, a_train], ans, epochs=500, batch_size=1000, validation_split=0.1)

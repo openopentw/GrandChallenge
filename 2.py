@@ -152,39 +152,23 @@ def generate_model(q_shape, a_shape):
     # TODO: maybe bidirectional rnn would be better
     q_vec = GRU(200, activation='elu', dropout=0.3)(q_vec)
     q_vec = Dropout(0.5)(q_vec)
-    q_vec = Dense(100, activation='elu')(q_vec)
-    q_vec = BatchNormalization()(q_vec)
-    q_vec = Dropout(0.5)(q_vec)
-    q_vec = Dense(50, activation='elu')(q_vec)
     q_vec = BatchNormalization()(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
     a_vec = GRU(200, activation='elu', dropout=0.3)(a_vec)
     a_vec = Dropout(0.5)(a_vec)
-    a_vec = Dense(100, activation='elu')(a_vec)
-    a_vec = BatchNormalization()(a_vec)
-    a_vec = Dropout(0.5)(a_vec)
-    a_vec = Dense(50, activation='elu')(a_vec)
     a_vec = BatchNormalization()(a_vec)
 
-    # XXX: dont use dnn!!
-    # merge_vec = Concatenate()([q_vec, a_vec])
-    # hidden = Dense(150, activation='elu')(merge_vec)
-    # hidden = Dropout(0.2)(hidden)
-    # hidden = Dense(100, activation='elu')(hidden)
-    # hidden = Dropout(0.2)(hidden)
-    # output = Dense(1, activation='softmax')(hidden) # maybe sigmoid will be better
+    # NOTE: DNN now !
+    merge_vec = Concatenate()([q_vec, a_vec])
+    hidden = Dense(150, activation='elu')(merge_vec)
+    hidden = Dropout(0.2)(hidden)
+    hidden = Dense(100, activation='elu')(hidden)
+    hidden = Dropout(0.2)(hidden)
+    output = Dense(1, activation='softmax')(hidden) # maybe sigmoid will be better
 
-    # TODO: use cosine similarity
-    # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051
-    # cos_distance = merge([q_vec, a_vec], mode='cos', dot_axes=1)    # magic dot_axes works here!
-    cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
-    # cos_distance = Reshape((1,))(cos_distance)
-    cos_similarity = Reshape((1,))(cos_distance)
-    # cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
-
-    model = Model([q_input, a_input], [cos_similarity])
+    model = Model([q_input, a_input], [output])
     model.summary()
     return model
 model = generate_model(q_train.shape[1], a_train.shape[1])

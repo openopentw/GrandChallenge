@@ -31,7 +31,7 @@ EMBD_DIM = 400
 # load training data
 with open(data_path, 'r', encoding='utf8') as f:
     text_data = f.read().splitlines()
-text_data = text_data[ : 10000]
+text_data = text_data[ : len(text_data) // 5 ]
 print('Found {} sentences.'.format(len(text_data)))
 
 # generate tokenizer for all data (q_train + a_train)
@@ -152,5 +152,5 @@ def generate_model(q_shape, a_shape):
     return model
 model = generate_model(q_train.shape[1], a_train.shape[1])
 
-model.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
-model.fit([q_train, a_train], ans, epochs=500, batch_size=64, validation_split=0.1)
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.fit([q_train, a_train], ans, epochs=500, batch_size=5000, validation_split=0.1)

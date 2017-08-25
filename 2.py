@@ -29,6 +29,8 @@ word_vec_path = './outside_data/wiki.zh.vector'
 EMBD_DIM = 400
 # word_vec_path = './outside_data/my.cbow.200d.txt'
 # EMBD_DIM = 200
+SAVE_LOAD = 'save'
+word_index_path = './word_index/word_index.json'
 
 # load training data
 with open(data_path, 'r', encoding='utf8') as f:
@@ -38,11 +40,15 @@ print('Found {} sentences.'.format(len(text_data)))
 
 # generate tokenizer for all data (q_train + a_train)
 tokenizer = Tokenizer()
-tokenizer.fit_on_texts(text_data)
-# with open(json_path, 'w') as fp:
-#     json.dump(tokenizer.word_index, fp)
-# tokenizer.word_index = word_index
-word_index = tokenizer.word_index
+if SAVE_LOAD == 'save': #save
+    tokenizer.fit_on_texts(text_data)
+    with open(word_index_path, 'w') as f:
+        json.dump(tokenizer.word_index, f)
+    word_index = tokenizer.word_index
+elif SAVE_LOAD == 'load':   # load
+    with open(word_index_path) as f:
+        word_index = json.load(f)
+    tokenizer.word_index = word_index
 print('Found {} unique tokens.'.format(len(word_index)))
 
 n_wrong_ans = 1

@@ -131,13 +131,13 @@ def generate_model(q_shape, a_shape):
     # example: https://github.com/fchollet/keras/blob/master/examples/imdb_bidirectional_lstm.py
     # official: https://keras.io/layers/wrappers/#bidirectional
     q_vec = GRU(200, activation='elu', dropout=0.3)(q_vec)
-    q_vec = Dropout(0.7)(q_vec)
+    q_vec = Dropout(0.8)(q_vec)
     q_vec = Dense(100, activation='elu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
     a_vec = GRU(200, activation='elu', dropout=0.3)(a_vec)
-    a_vec = Dropout(0.7)(a_vec)
+    a_vec = Dropout(0.8)(a_vec)
     a_vec = Dense(100, activation='elu')(a_vec)
 
     # use cosine similarity

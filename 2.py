@@ -127,15 +127,19 @@ ans = ans.reshape(ans.size, 1)
 def generate_model(q_shape, a_shape):
     q_input = Input(shape=(q_shape,))
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
-    q_vec = Bidirectional(GRU(200, activation='elu', dropout=0.3))(q_vec)
-    q_vec = Dropout(0.7)(q_vec)
-    q_vec = Dense(100, activation='elu')(q_vec)
+    q_vec = Bidirectional(GRU(400, activation='relu', dropout=0.5))(q_vec)
+    q_vec = Dropout(0.5)(q_vec)
+    q_vec = Dense(100, activation='relu')(q_vec)
+    q_vec = Dropout(0.5)(q_vec)
+    q_vec = Dense(50, activation='relu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
-    a_vec = Bidirectional(GRU(200, activation='elu', dropout=0.3))(a_vec)
-    a_vec = Dropout(0.7)(a_vec)
-    a_vec = Dense(100, activation='elu')(a_vec)
+    a_vec = Bidirectional(GRU(400, activation='relu', dropout=0.5))(a_vec)
+    a_vec = Dropout(0.5)(a_vec)
+    a_vec = Dense(100, activation='relu')(a_vec)
+    a_vec = Dropout(0.5)(a_vec)
+    a_vec = Dense(50, activation='relu')(a_vec)
 
     # use cosine similarity
     # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051

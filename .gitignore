@@ -123,3 +123,7 @@ outside_data/wiki\.zh\.vector\.zip
 outside_data/my\.cbow\.200d\.txt
 
 outside_data/my\.cbow\.200d\.tar\.gz
+
+model/
+
+weights/

@@ -9,6 +9,7 @@ def use_device(device):
 use_device('gpu')  # cpu / gpu
 
 import jieba
+import json
 import numpy as np
 import os
 import random
@@ -29,7 +30,7 @@ ID = 1
 print("\nID = {}\n".format(ID))
 model_path = './model/{}.h5'.format(ID)
 # weights_path = './weights/{}.weights'.format(ID)
-weights_path = '{ID}-{epoch:02d}-{val_loss:.2f}.h5'.format(ID=ID)
+weights_path = '1-{epoch:02d}-{val_loss:.2f}.h5'
 word_index_path = './word_index/{}.json'.format(ID)
 SAVE_LOAD = 'save'
 

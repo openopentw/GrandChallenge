@@ -29,7 +29,7 @@ ID = 1
 print("\nID = {}\n".format(ID))
 model_path = './model/{}.h5'.format(ID)
 # weights_path = './weights/{}.weights'.format(ID)
-weights_path = '{id}-{epoch:02d}-{val_loss:.2f}.h5'.format({'id':ID,})
+weights_path = '{ID}-{epoch:02d}-{val_loss:.2f}.h5'.format(ID=ID)
 word_index_path = './word_index/{}.json'.format(ID)
 SAVE_LOAD = 'save'
 

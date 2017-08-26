@@ -16,6 +16,7 @@ import random
 
 import keras
 from keras import backend as K
+from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.layers import Input, Dropout, Dense, Embedding, LSTM, GRU, Bidirectional, merge
 from keras.layers.core import Reshape, Lambda
 from keras.layers.merge import Add, Dot, Concatenate

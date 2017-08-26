@@ -26,12 +26,11 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
-ID = 1
+ID = 2
 
 print("\nID = {}\n".format(ID))
-model_path = './model/{}.h5'.format(ID)
-# weights_path = './weights/{}.weights'.format(ID)
-weights_path = '1-{epoch:02d}-{val_loss:.2f}.h5'
+model_path = './model/model_{}.h5'.format(ID)
+weights_path = './weights/weights_{}.weights'.format(ID)
 word_index_path = './word_index/{}.json'.format(ID)
 SAVE_LOAD = 'save'
 
@@ -40,11 +39,13 @@ word_vec_path = './outside_data/wiki.zh.vector'
 EMBD_DIM = 400
 # word_vec_path = './outside_data/my.cbow.200d.txt'
 # EMBD_DIM = 200
+q_maxlen = 172
+a_maxlen = 72
 
 # load training data
 with open(data_path, 'r', encoding='utf8') as f:
     text_data = f.read().splitlines()
-text_data = text_data[ : len(text_data) ]
+# text_data = text_data[ : len(text_data) ]
 print('Found {} sentences.'.format(len(text_data)))
 
 # generate tokenizer for all data (q_train + a_train)
@@ -87,7 +88,7 @@ q_sequences = []
 a_sequences = []
 ans = []
 rand_ans = np.random.randint(n_wrong_ans + 1, size=len(sequences))
-for i,_ in enumerate(text_data):
+for i,_ in enumerate(sequences):
     if i < 3 or not sequences[i-3] or not sequences[i-2] or not sequences[i-1] or not sequences[i]:
         continue
     fake_ans_cnt = 0
@@ -103,9 +104,9 @@ for i,_ in enumerate(text_data):
 print('Finish generating questions and answers.')
 
 # pad_sequences
-q_maxlen = max(len(seq) for seq in q_sequences)
+# q_maxlen = max(len(seq) for seq in q_sequences)
 q_train_data = pad_sequences(q_sequences, maxlen=q_maxlen)
-a_maxlen = max(len(seq) for seq in a_sequences)
+# a_maxlen = max(len(seq) for seq in a_sequences)
 a_train_data = pad_sequences(a_sequences, maxlen=a_maxlen)
 print('Finish padding sequences.')
 
@@ -144,13 +145,13 @@ ans = ans.reshape(ans.size, 1)
 def generate_model(q_shape, a_shape):
     q_input = Input(shape=(q_shape,))
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
-    q_vec = Bidirectional(GRU(300, activation='relu', dropout=0.3))(q_vec)
+    q_vec = Bidirectional(GRU(200, activation='relu', dropout=0.5))(q_vec)
     q_vec = Dropout(0.7)(q_vec)
     q_vec = Dense(100, activation='relu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
-    a_vec = Bidirectional(GRU(300, activation='relu', dropout=0.3))(a_vec)
+    a_vec = Bidirectional(GRU(200, activation='relu', dropout=0.5))(a_vec)
     a_vec = Dropout(0.7)(a_vec)
     a_vec = Dense(100, activation='relu')(a_vec)
 
@@ -170,7 +171,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
 earlystopping = EarlyStopping(monitor='val_acc', patience=10, mode='max', verbose=1)
-model.fit([q_train, a_train], ans, epochs=60, batch_size=250, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+model.fit([q_train, a_train], ans, epochs=60, batch_size=64, validation_split=0.1, callbacks=[checkpoint, earlystopping])
 
 model.load_weights(weights_path)
 model.save(model_path)

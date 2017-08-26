@@ -15,7 +15,7 @@ import random
 
 import keras
 from keras import backend as K
-from keras.layers import Input, Dropout, Dense, Embedding, LSTM, GRU, merge, Bidirectional
+from keras.layers import Input, Dropout, Dense, Embedding, LSTM, GRU, Bidirectional, merge
 from keras.layers.core import Reshape, Lambda
 from keras.layers.merge import Add, Dot, Concatenate
 from keras.layers.normalization import BatchNormalization
@@ -24,18 +24,25 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
+ID = 1
+
+print("\nID = {}\n".format(ID))
+model_path = './model/{}.h5'.format(ID)
+# weights_path = './weights/{}.weights'.format(ID)
+weights_path = '{id}-{epoch:02d}-{val_loss:.2f}.h5'.format({'id':ID,})
+word_index_path = './word_index/{}.json'.format(ID)
+SAVE_LOAD = 'save'
+
 data_path = './preprocess/corpus.txt'
 word_vec_path = './outside_data/wiki.zh.vector'
 EMBD_DIM = 400
 # word_vec_path = './outside_data/my.cbow.200d.txt'
 # EMBD_DIM = 200
-SAVE_LOAD = 'save'
-word_index_path = './word_index/word_index.json'
 
 # load training data
 with open(data_path, 'r', encoding='utf8') as f:
     text_data = f.read().splitlines()
-text_data = text_data[ : len(text_data) // 5 ]
+text_data = text_data[ : len(text_data) ]
 print('Found {} sentences.'.format(len(text_data)))
 
 # generate tokenizer for all data (q_train + a_train)
@@ -135,15 +142,15 @@ ans = ans.reshape(ans.size, 1)
 def generate_model(q_shape, a_shape):
     q_input = Input(shape=(q_shape,))
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
-    q_vec = Bidirectional(GRU(600, activation='relu', dropout=0.5))(q_vec)
+    q_vec = Bidirectional(GRU(300, activation='relu', dropout=0.3))(q_vec)
     q_vec = Dropout(0.7)(q_vec)
-    q_vec = Dense(200, activation='relu')(q_vec)
+    q_vec = Dense(100, activation='relu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
-    a_vec = Bidirectional(GRU(600, activation='relu', dropout=0.5))(a_vec)
+    a_vec = Bidirectional(GRU(300, activation='relu', dropout=0.3))(a_vec)
     a_vec = Dropout(0.7)(a_vec)
-    a_vec = Dense(200, activation='relu')(a_vec)
+    a_vec = Dense(100, activation='relu')(a_vec)
 
     # use cosine similarity
     # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051
@@ -158,4 +165,10 @@ def generate_model(q_shape, a_shape):
 model = generate_model(q_train.shape[1], a_train.shape[1])
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit([q_train, a_train], ans, epochs=100, batch_size=64, validation_split=0.1)
+
+checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
+earlystopping = EarlyStopping(monitor='val_acc', patience=10, mode='max', verbose=1)
+model.fit([q_train, a_train], ans, epochs=60, batch_size=250, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+
+model.load_weights(weights_path)
+model.save(model_path)

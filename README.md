@@ -1,5 +1,10 @@
 # Grand Challenge
 
+## TODO
+
+- [ ] 只用 `GRU` ，不用 `Dense`。
+- [ ] 試試看把 `mse` 當作 `loss` 的效果。
+
 ## 分數紀錄
 
 | ID   | score     | description                              | machine  | comment |

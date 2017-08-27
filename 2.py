@@ -1,17 +1,21 @@
+import os
+import sys
 def use_device(device):
-    import os
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    if device == 'gpu':
+    if device == 0:
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    elif device == 'cpu':
+    elif device == 1:
         os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     return
-use_device('gpu')  # cpu / gpu
+if len(sys.argv) < 1:
+    use_device(0)  # 0 / 1 / 2 / ...
+else:
+    use_device(sys.argv[1])
+    print('Using device {}'.format(sys.argv[1]))
 
 import jieba
 import json
 import numpy as np
-import os
 import random
 
 import keras
@@ -26,7 +30,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
-ID = 2
+ID = 3
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)

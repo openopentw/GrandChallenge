@@ -146,14 +146,14 @@ def generate_model(q_shape, a_shape):
     q_input = Input(shape=(q_shape,))
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
     q_vec = Bidirectional(GRU(200, activation='relu', dropout=0.5))(q_vec)
-    q_vec = Dropout(0.7)(q_vec)
-    q_vec = Dense(100, activation='relu')(q_vec)
+    # q_vec = Dropout(0.7)(q_vec)
+    # q_vec = Dense(100, activation='relu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
     a_vec = Bidirectional(GRU(200, activation='relu', dropout=0.5))(a_vec)
-    a_vec = Dropout(0.7)(a_vec)
-    a_vec = Dense(100, activation='relu')(a_vec)
+    # a_vec = Dropout(0.7)(a_vec)
+    # a_vec = Dense(100, activation='relu')(a_vec)
 
     # use cosine similarity
     # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051
@@ -170,8 +170,8 @@ model = generate_model(q_train.shape[1], a_train.shape[1])
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
-earlystopping = EarlyStopping(monitor='val_acc', patience=10, mode='max', verbose=1)
-model.fit([q_train, a_train], ans, epochs=60, batch_size=64, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+earlystopping = EarlyStopping(monitor='val_acc', patience=5, mode='max', verbose=1)
+model.fit([q_train, a_train], ans, epochs=60, batch_size=1024, validation_split=0.1, callbacks=[checkpoint, earlystopping])
 
 model.load_weights(weights_path)
 model.save(model_path)

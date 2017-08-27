@@ -25,7 +25,7 @@ from keras.preprocessing.text import Tokenizer
 
 
 # parameter
-ID = 1
+ID = 2
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)
@@ -71,9 +71,9 @@ for i,seq in enumerate(sequences):
 print('Finish generating questions and answers.')
 
 # pad_sequences
-q_maxlen = max(len(seq) for seq in q_sequences)
+# q_maxlen = max(len(seq) for seq in q_sequences)
 q_test_data = pad_sequences(q_sequences, maxlen=q_maxlen)
-a_maxlen = max(len(seq) for seq in a_sequences)
+# a_maxlen = max(len(seq) for seq in a_sequences)
 a_test_data = pad_sequences(a_sequences, maxlen=a_maxlen)
 print('Finish padding sequences.')
 
@@ -114,11 +114,11 @@ model = load_model(model_path)
 output = model.predict([q_test, a_test])
 
 # get the answer from predicted result
-output = output.reshape(output // 6, 6)
+output = output.reshape(output.size // 6, 6)
 ans = np.argmax(output, axis=1)
 
 # print ans out
-with open(output_path) as f:
+with open(output_path, 'w') as f:
     print('id,ans', file=f)
     for i, a in enumerate(ans):
         print('{},{}'.format(i+1, a), file=f)

@@ -30,7 +30,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
-ID = 3
+ID = 5
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)
@@ -176,7 +176,8 @@ def generate_model(q_shape, a_shape):
     return model
 model = generate_model(q_train.shape[1], a_train.shape[1])
 
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+# model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
 checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
 earlystopping = EarlyStopping(monitor='val_acc', patience=5, mode='max', verbose=1)

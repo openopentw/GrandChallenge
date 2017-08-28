@@ -7,7 +7,7 @@ def use_device(device):
     elif device == 1:
         os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     return
-if len(sys.argv) < 1:
+if len(sys.argv) < 2:
     use_device(0)  # 0 / 1 / 2 / ...
 else:
     use_device(sys.argv[1])

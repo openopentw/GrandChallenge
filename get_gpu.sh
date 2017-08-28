@@ -5,7 +5,7 @@ doing=0
 
 while [ $doing != 1 ]; do
 	cmd0=`nvidia-smi | tail -n +15 | grep " 3011 "`
-	cmd1=`nvidia-smi | tail -n +15 | grep " 4954 "`
+	cmd1=`nvidia-smi | tail -n +15 | grep " 15920 "`
 
 	if [ ! "$cmd0" ]; then
 		doing=1
@@ -18,7 +18,7 @@ while [ $doing != 1 ]; do
 	fi
 
 	if [ $doing != 1 ]; then
-		sleep 10
 		echo "no free gpu"
+		sleep 10
 	fi
 done

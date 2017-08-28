@@ -25,7 +25,7 @@ from keras.preprocessing.text import Tokenizer
 
 
 # parameter
-ID = 2
+ID = 3
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)

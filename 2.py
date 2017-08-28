@@ -87,17 +87,21 @@ for _ in range(n_wrong_ans):
 # generate sequences
 sequences = tokenizer.texts_to_sequences(text_data)
 
-# concate 3 together & generate other 5 wrong answer
+# generate q & a sequences
 q_sequences = []
 a_sequences = []
 ans = []
+
+# concate 3 together & generate other N wrong answer
 rand_ans = np.random.randint(n_wrong_ans + 1, size=len(sequences))
 for i,_ in enumerate(sequences):
     if i < 3 or not sequences[i-3] or not sequences[i-2] or not sequences[i-1] or not sequences[i]:
         continue
     fake_ans_cnt = 0
-    for j in range(n_wrong_ans):
+    for j in range(n_wrong_ans + 1):
+        # append a q_sequence
         q_sequences += [ sequences[i-3] + sequences[i-2] + sequences[i-1] ]
+        # append an a_sequence
         if j == rand_ans[i]:
             ans += [1]
             a_sequences += [ sequences[i] ]
@@ -105,6 +109,7 @@ for i,_ in enumerate(sequences):
             ans += [0]
             a_sequences += [ sequences[fake_ans_id[fake_ans_cnt][i]] ]
             fake_ans_cnt += 1
+
 print('Finish generating questions and answers.')
 
 # pad_sequences

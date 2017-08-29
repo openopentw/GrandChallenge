@@ -18,9 +18,9 @@
 
 ## 分數紀錄
 
-| ID   | vali score | kaggle score | description                                 | machine  | comment                                  |
-| ---- | ---------- | ------------ | ------------------------------------------- | -------- | ---------------------------------------- |
-| 1    | `0.68366`  |              | `RNN(dropout(0.3))`<br>`text_data`: 0 ~ 1/5 | `aiuser` |                                          |
-| 2    | `0.67983`  | `0.38800`    | `RNN(dropout(0.5))`<br>`text_data`: all     | `aiuser` |                                          |
-| 3    | `0.68972`  | `0.48400`    | `RNN(dropout(0.5))`<br>`loss` : `mse`       | `aiuser` | 跟上一個也差太多 = =<br>敢情 `mse` 比 `binary_crossentropy` 好很多？ |
-| 5    | `0.69014`  | `0.46000`    | fix bug (not generate all answers)          | `aiuser` |                                          |
+| ID | vali score | kaggle score | description                                 | machine  | comment                                  |
+|:--:| ---------- | ------------ | ------------------------------------------- | -------- | ---------------------------------------- |
+|  1 | `0.68366`  |              | `RNN(dropout(0.3))`<br>`text_data`: 0 ~ 1/5 | `aiuser` |                                          |
+|  2 | `0.67983`  | `0.38800`    | `RNN(dropout(0.5))`<br>`text_data`: all     | `aiuser` |                                          |
+|  3 | `0.68972`  | `0.48400`    | `RNN(dropout(0.5))`<br>`loss` : `mse`       | `aiuser` | 跟上一個也差太多 = =<br>敢情 `mse` 比 `binary_crossentropy` 好很多？ |
+|  5 | `0.69014`  | `0.46000`    | fix bug (not generate all answers)          | `azure`  | 看來結果沒差太多，問題不是在這裡         |

@@ -167,6 +167,8 @@ def generate_model(q_shape, a_shape):
     # use cosine similarity
     # see here: https://github.com/fchollet/keras/issues/2672#issuecomment-218188051
     # cos_distance = merge([q_vec, a_vec], mode='cos', dot_axes=1)    # magic dot_axes works here!
+    q_vec = K.l2_normalize(q_vec, axis=-1)
+    a_vec = K.l2_normalize(a_vec, axis=-1)
     cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
     cos_distance = Reshape((1,))(cos_distance)
     cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
@@ -180,7 +182,7 @@ model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
 checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
 earlystopping = EarlyStopping(monitor='val_acc', patience=5, mode='max', verbose=1)
-model.fit([q_train, a_train], ans, epochs=60, batch_size=64, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+model.fit([q_train, a_train], ans, epochs=60, batch_size=1024, validation_split=0.1, callbacks=[checkpoint, earlystopping])
 
 model.load_weights(weights_path)
 model.save(model_path)

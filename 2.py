@@ -172,7 +172,7 @@ def generate_model(q_shape, a_shape):
     # cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
     # cos_distance = Reshape((1,))(cos_distance)
     # cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
-    cos_similarity = K.mean(1 - K.sum((y_true * y_pred), axis=-1))
+    cos_similarity = K.mean(1 - K.sum((q_vec * a_vec), axis=-1))
 
     model = Model([q_input, a_input], [cos_similarity])
     model.summary()

@@ -2,9 +2,9 @@ import os
 import sys
 def use_device(device):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    if device == 0:
+    if device == 0 or device == '0':
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    elif device == 1:
+    elif device == 1 or device == '1':
         os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     return
 if len(sys.argv) < 2:

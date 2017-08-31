@@ -169,9 +169,10 @@ def generate_model(q_shape, a_shape):
     # cos_distance = merge([q_vec, a_vec], mode='cos', dot_axes=1)    # magic dot_axes works here!
     q_vec = K.l2_normalize(q_vec, axis=-1)
     a_vec = K.l2_normalize(a_vec, axis=-1)
-    cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
-    cos_distance = Reshape((1,))(cos_distance)
-    cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
+    # cos_distance = Dot(axes=1, normalize=True)([q_vec, a_vec])
+    # cos_distance = Reshape((1,))(cos_distance)
+    # cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
+    cos_similarity = K.mean(1 - K.sum((y_true * y_pred), axis=-1))
 
     model = Model([q_input, a_input], [cos_similarity])
     model.summary()

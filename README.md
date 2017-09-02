@@ -6,7 +6,6 @@
 | -------------------------------------- | ---------------------------------------- |
 | `GRU` 裡面不要 `dropout` ，避免句子文法被斷掉？       | 在 `daniel` 上面有滿好的效果（`0.69879`)<br>(`GRU(128)`) |
 | `batch_size` 改為 64                     | 在 `daniel` 上面有滿好的效果（`0.69879`)<br>(`GRU(128)`) |
-| 加一層 `dense`                              | 結果上不去：`0.66841`                          |
 | 換另一種 `embedding` 看兩個的結果有沒有差            |                                          |
 | 不切 `validation set`                    |                                          |
 | 試試看不要只 append 3 個句子，多 append  2 個和 1 個 |                                          |
@@ -20,6 +19,7 @@
 | Y            | 把 `GRU` 的值改小一點，避免太快 `overfitting`        | `GRU(128)` 還不錯<br>`GRU(64)` 也差不多…<br>數字大小真的有差嗎 = = |
 | Y            | `GRU` 改用預設的 `activation function` (`tanh`) 看看 | `0.69202`                                |
 | Y            | `GRU` 的數字改成不是 400 的因數或倍數                 | `0.69202`                                |
+| N            | 加一層 `dense`                              | 結果都比較爛一點，還是不要加好了                         |
 
 ## 分數紀錄
 
@@ -32,3 +32,4 @@
 |  5   | `0.69014`  | `0.46000`    | fix bug (not generate all answers)       | `azure`  | 看來結果沒差太多，問題不是在這裡                         |
 |  6   | `0.69790`  | `0.52800`    | normalize (before cosine similarity)<br>batch_size(1024) | `azure`  | 結果是有比較好，不過還不是很OK…                        |
 |  8   | `0.72359`  | `0.58799`    | fix `cos_similarity` formula<br>no dropout<br>no dense | `azure`  | 結果還真的變好了…                                |
+|  9   | `0.71222`  | `0.56000`    | `GRU(128)`<br>`dropout(0.5)`<br>`dense(32, 'relu')` | `aiuser` | 結果比較爛<br>可見 `dense` 的效果並不好               |

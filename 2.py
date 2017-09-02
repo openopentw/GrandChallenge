@@ -30,7 +30,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
-ID = 10
+ID = 12
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)
@@ -145,7 +145,6 @@ for word,i in word_index.items():
         # words not found in embedding index will be all-zeros.
         embedding_matrix[i] = embedding_vector
 
-# TODO: split validation set
 q_train = q_train_data
 a_train = a_train_data
 ans = np.array(ans)
@@ -154,13 +153,13 @@ ans = ans.reshape(ans.size, 1)
 def generate_model(q_shape, a_shape):
     q_input = Input(shape=(q_shape,))
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
-    q_vec = Bidirectional(GRU(256, dropout=0.5))(q_vec)
+    q_vec = Bidirectional(GRU(128))(q_vec)
     # q_vec = Dropout(0.7)(q_vec)
     # q_vec = Dense(100, activation='relu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
-    a_vec = Bidirectional(GRU(256, dropout=0.5))(a_vec)
+    a_vec = Bidirectional(GRU(128))(a_vec)
     # a_vec = Dropout(0.7)(a_vec)
     # a_vec = Dense(100, activation='relu')(a_vec)
 
@@ -183,9 +182,10 @@ model = generate_model(q_train.shape[1], a_train.shape[1])
 
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
-earlystopping = EarlyStopping(monitor='val_acc', patience=5, mode='max', verbose=1)
-model.fit([q_train, a_train], ans, epochs=60, batch_size=1024, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+# checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
+# earlystopping = EarlyStopping(monitor='val_acc', patience=5, mode='max', verbose=1)
+# model.fit([q_train, a_train], ans, epochs=60, batch_size=1024, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+model.fit([q_train, a_train], ans, epochs=6, batch_size=1024)
 
-model.load_weights(weights_path)
+# model.load_weights(weights_path)
 model.save(model_path)

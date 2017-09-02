@@ -4,8 +4,8 @@
 doing=0
 
 while [ $doing != 1 ]; do
-	cmd0=`nvidia-smi | tail -n +15 | grep " 3011 "`
-	cmd1=`nvidia-smi | tail -n +15 | grep " 15920 "`
+	cmd0=`nvidia-smi | tail -n +15 | grep " 2764 "`
+	cmd1=`nvidia-smi | tail -n +15 | grep " 2432 "`
 
 	if [ ! "$cmd0" ]; then
 		doing=1

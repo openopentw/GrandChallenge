@@ -31,7 +31,8 @@ print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)
 weights_path = './weights/weights_{}.weights'.format(ID)
 word_index_path = './word_index/{}.json'.format(ID)
-output_path = './subm/{}.csv'.format(ID)
+output_path = './output/{}.csv'.format(ID)
+ans_path = './subm/{}.csv'.format(ID)
 
 # data_path = './preprocess/corpus.txt'
 test_data_path = './preprocess/test_corpus.csv'
@@ -107,8 +108,6 @@ print('Finish generating embedding matrix.')
 q_test = q_test_data
 a_test = a_test_data
 
-# TODO: test if work
-
 # load model & predict
 model = load_model(model_path)
 output = model.predict([q_test, a_test])
@@ -118,7 +117,10 @@ output = output.reshape(output.size // 6, 6)
 ans = np.argmax(output, axis=1)
 
 # print ans out
-with open(output_path, 'w') as f:
+np.savetxt(output_path, output, delimiter=',')
+
+# print ans out
+with open(ans_path, 'w') as f:
     print('id,ans', file=f)
     for i, a in enumerate(ans):
         print('{},{}'.format(i+1, a), file=f)

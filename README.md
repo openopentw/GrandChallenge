@@ -33,3 +33,4 @@
 |  6   | `0.69790`  | `0.52800`    | normalize (before cosine similarity)<br>batch_size(1024) | `azure`  | 結果是有比較好，不過還不是很OK…                        |
 |  8   | `0.72359`  | `0.58799`    | fix `cos_similarity` formula<br>no dropout<br>no dense | `azure`  | 結果還真的變好了…                                |
 |  9   | `0.71222`  | `0.56000`    | `GRU(128)`<br>`dropout(0.5)`<br>`dense(32, 'relu')` | `aiuser` | 結果比較爛<br>可見 `dense` 的效果並不好               |
+|  10  | `0.72535`  | `0.56799`    | `GRU(256)`                               | `azure`  | 看來還是 `128` 比較好？                          |

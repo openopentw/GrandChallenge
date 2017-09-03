@@ -127,3 +127,9 @@ outside_data/my\.cbow\.200d\.tar\.gz
 model/
 
 weights/
+
+preprocess/corpus_with_TC\.txt
+
+preprocess/corpus_all\.txt
+
+preprocess/corpus_no_TC\.txt

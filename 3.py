@@ -30,7 +30,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
-ID = 100
+ID = 13
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)
@@ -156,7 +156,7 @@ input_dim = q_train.shape[1]
 def create_base_model(input_dim):
     seq = Sequential()
     seq.add(Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False, input_shape=(input_dim, )))
-    seq.add(Bidirectional(GRU(256)))
+    seq.add(Bidirectional(GRU(128)))
     return seq
 base_model = create_base_model(input_dim)
 
@@ -173,9 +173,11 @@ model.summary()
 
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
-earlystopping = EarlyStopping(monitor='val_acc', patience=5, mode='max', verbose=1)
-model.fit([q_train, a_train], ans, epochs=60, batch_size=1024, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+# checkpoint = ModelCheckpoint(filepath=weights_path, save_best_only=True, save_weights_only=True, monitor='val_acc', mode='max', verbose=1)
+# earlystopping = EarlyStopping(monitor='val_acc', patience=5, mode='max', verbose=1)
+# model.fit([q_train, a_train], ans, epochs=60, batch_size=512, validation_split=0.1, callbacks=[checkpoint, earlystopping])
+checkpoint = ModelCheckpoint(filepath=weights_path, save_weights_only=True, verbose=1)
+model.fit([q_train, a_train], ans, epochs=6, batch_size=512, callbacks=[checkpoint])
 
 model.load_weights(weights_path)
 model.save(model_path)

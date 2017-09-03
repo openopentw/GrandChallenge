@@ -31,16 +31,17 @@
 |  3   | `0.67368`                 | `0.41200`    | concate **2** together<br>`GRU(128, dropout(0.4))`<br>`q_maxlen` = 132<br>`a_maxlen` = 72 | `daniel` | 看來還是 concate 3 個的結果比較好！                  |
 |  5   | `0.69014`                 | `0.46000`    | fix bug (not generate all answers)       | `azure`  | 看來結果沒差太多，問題不是在這裡                         |
 |  6   | `0.69790`                 | `0.52800`    | normalize (before cosine similarity)<br>batch_size(1024) | `azure`  | 結果是有比較好，不過還不是很OK…                        |
-|  8   | `0.72359`                 | `0.58799`    | fix `cos_similarity` formula<br>no dropout<br>no dense | `azure`  | 結果還真的變好了…                                |
+|  8   | `0.72359`                 | `0.58800`    | fix `cos_similarity` formula<br>no dropout<br>no dense | `azure`  | 結果還真的變好了…                                |
 |  9   | `0.71222`                 | `0.56000`    | `GRU(128)`<br>`dropout(0.5)`<br>`dense(32, 'relu')` | `aiuser` | 結果比較爛<br>可見 `dense` 的效果並不好               |
-|  10  | `0.72535`                 | `0.56799`    | `GRU(256)`                               | `azure`  | 看來還是 `128` 比較好？                          |
-|  12  | `0.7550`<br>(on training) | `0.61999`    | no `vali`<br>`GRU(128)`                  | `azure`  | 不切 `validation set` 的結果變得更好了！！           |
+|  10  | `0.72535`                 | `0.56800`    | `GRU(256)`                               | `azure`  | 看來還是 `128` 比較好？                          |
+|  11  | `0.72185`                 | `0.58399`    | `siamese network`<br>`GRU(256)`          | `aiuser` | 結果比 train 兩個還好！<br>可是 train 一次要很久…       |
+|  12  | `0.7550`<br>(on training) | `0.62000`    | no `vali`<br>`GRU(128)`                  | `azure`  | 不切 `validation set` 的結果變得更好了！！           |
 
 ## 加總的分數紀錄
 
 | ID           | vali score | description                     | comment                        |
 | ------------ | ---------- | ------------------------------- | ------------------------------ |
 | 9\_10        | `0.58800`  | `9` + `10`                      | 分數有比 `9` 和 `10` 本身要好了 2 ~ 3 了！ |
-| 8\_9\_10     | `0.61999`  | 2 * `8` + `9` + `10`            | 分數大突破！！！                       |
+| 8\_9\_10     | `0.62000`  | 2 * `8` + `9` + `10`            | 分數大突破！！！                       |
 | 8\_9\_10\_12 | `0.62800`  | 2 * `8` + `9` + `10` + 4 * `12` | 上升的幅度變小了…看來是 `8`、`9`、`10` 太弱了？ |
 

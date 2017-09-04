@@ -39,6 +39,7 @@
 |  12  | `0.7550`(on training)               | `0.62000`    | no `vali`<br>`GRU(128)`                  | `azure`  | 不切 `validation set` 的結果變得更好了！！           |
 |  13  | `0.7496` (on training)<br>epoch `6` | `0.57599`    | `siamese network`<br>no `vali`<br>`GRU(128)` | `aiuser` | 看來 `siamese` 配上 `GRU(128)` 比 `GRU(256)` 弱一點@@<br>沒時間了，就先不要試這個好了… |
 |  14  | `0.72339`                           |              | `GRU(128, tanh)`                         | `azure`  | 從 `validation set` 看來，結果跟預設的一樣。<br>看來預設的 `activation function` 的確是 `tanh` |
+|  16  | `0.73119`                           | `0.57999`    | `corpus_all.txt`<br>split `vali`         | `azure`  | 看來新增的資料品質不是很好…<br>正確率沒有明顯影響…             |
 
 ## 加總的分數紀錄
 

@@ -5,9 +5,12 @@ import numpy as np
 # parameters
 output_IDs = [
     8,
-    9,
-    10,
+    # 9,
+    # 10,
+    11,
     12,
+    13,
+    14,
 ]
 
 ans_path = './subm/'
@@ -29,7 +32,7 @@ for i,ID in enumerate(output_IDs):
 
 # get the answer from outputs
 # output = outputs.sum(axis=0)
-output = 2 * outputs[0] + outputs[1] + outputs[2] + 4 * outputs[3]
+output = outputs[0] + outputs[1] + 2 * outputs[2] + outputs[3] + outputs[4]
 ans = np.argmax(output, axis=1)
 
 # print ans out

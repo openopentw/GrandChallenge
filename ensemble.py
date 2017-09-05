@@ -5,13 +5,16 @@ import numpy as np
 # parameters
 output_IDs = [
     8,
-    9,
-    10,
+    # 9,
+    # 10,
     11,
     12,
     12,
     13,
     16,
+    18,
+    19,
+    20,
 ]
 
 ans_path = './subm/'

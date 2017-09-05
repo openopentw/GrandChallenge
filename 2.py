@@ -30,7 +30,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
-ID = 19
+ID = 20
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)
@@ -153,13 +153,13 @@ ans = ans.reshape(ans.size, 1)
 def generate_model(q_shape, a_shape):
     q_input = Input(shape=(q_shape,))
     q_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(q_input)
-    q_vec = Bidirectional(GRU(156))(q_vec)
+    q_vec = Bidirectional(GRU(176))(q_vec)
     # q_vec = Dropout(0.7)(q_vec)
     # q_vec = Dense(100, activation='relu')(q_vec)
 
     a_input = Input(shape=(a_shape,))
     a_vec = Embedding(num_words, EMBD_DIM, weights=[embedding_matrix], trainable=False)(a_input)
-    a_vec = Bidirectional(GRU(156))(a_vec)
+    a_vec = Bidirectional(GRU(176))(a_vec)
     # a_vec = Dropout(0.7)(a_vec)
     # a_vec = Dense(100, activation='relu')(a_vec)
 

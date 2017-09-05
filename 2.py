@@ -30,7 +30,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
 # parameter
-ID = 18
+ID = 19
 
 print("\nID = {}\n".format(ID))
 model_path = './model/model_{}.h5'.format(ID)
